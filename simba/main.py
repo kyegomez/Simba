@@ -83,11 +83,14 @@ class EinFFT(nn.Module):
         iffted = torch.fft.ifft2(activated_complex, dim=(-2, -1))
         return iffted.real
 
-
-x = torch.randn(1, 3, 64, 64)  # Random input tensor
-einfft = EinFFT(3, 64, 64)  # Instantiate EinFFT module
-output = einfft(x)  # Apply EinFFT
-print(output)  # Print module architecture
+# Random input tensor
+x = torch.randn(1, 3, 64, 64)
+# Instantiate EinFFT module
+einfft = EinFFT(3, 64, 64)
+# Apply EinFFT to get an output
+output = einfft(x)
+# Print output tensor
+print(output)
 
 
 class Simba(nn.Module):
