@@ -3,7 +3,7 @@ from torch import nn, Tensor
 from zeta.nn import MambaBlock
 
 
-class EMM(nn.Module):
+class EMMImage(nn.Module):
     """
     EMM (Element-wise Multiplication Module) is a PyTorch module that performs element-wise multiplication
     between two tensors.
@@ -22,8 +22,15 @@ class EMM(nn.Module):
         super().__init__()
     
     def forward(self, x: Tensor, weight: Tensor) -> Tensor:
-        return x * weight
+        x_b, x_h, x_w, x_c = x.shape
         
+        # Weight shape
+        c_b, c_d, c_d = weight.shape
+        
+        # Something
+        
+        # Multiply
+        return x * weight
         
 
 class EinFFT(nn.Module):
@@ -111,9 +118,10 @@ class Simba(nn.Module):
         normed_new = nn.LayerNorm(d)(out)
         
         # einfft
+        fasted = normed_new
         
         # Dropout
-        out = self.dropout(normed_new)
+        out = self.dropout(fasted)
         
         # residual
         return out + residual_new
