@@ -27,6 +27,7 @@ model = Simba(
     patch_size=16,          # Size of the image patches
     image_size=224,         # Size of the input image
     channels=3,             # Number of input channels
+    # use_pos_emb=True # If you want
 )
 
 # Forward pass
