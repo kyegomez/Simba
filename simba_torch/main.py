@@ -5,16 +5,23 @@ from simba_torch.ein_fft import EinFFTText
 from einops.layers.torch import Rearrange, Reduce
 
 
-def posemb_sincos_2d(h, w, dim, temperature: int = 10000, dtype = torch.float32):
-    y, x = torch.meshgrid(torch.arange(h), torch.arange(w), indexing="ij")
-    assert (dim % 4) == 0, "feature dimension must be multiple of 4 for sincos emb"
+def posemb_sincos_2d(
+    h, w, dim, temperature: int = 10000, dtype=torch.float32
+):
+    y, x = torch.meshgrid(
+        torch.arange(h), torch.arange(w), indexing="ij"
+    )
+    assert (
+        dim % 4
+    ) == 0, "feature dimension must be multiple of 4 for sincos emb"
     omega = torch.arange(dim // 4) / (dim // 4 - 1)
-    omega = 1.0 / (temperature ** omega)
+    omega = 1.0 / (temperature**omega)
 
     y = y.flatten()[:, None] * omega[None, :]
     x = x.flatten()[:, None] * omega[None, :]
     pe = torch.cat((x.sin(), x.cos(), y.sin(), y.cos()), dim=1)
     return pe.type(dtype)
+
 
 class SimbaBlock(nn.Module):
     """
@@ -170,7 +177,6 @@ class Simba(nn.Module):
         self.patch_size = patch_size
         self.image_size = image_size
         self.use_pos_emb = use_pos_emb
-        
 
         image_height, image_width = image_size, image_size
         patch_height, patch_width = patch_size, patch_size
@@ -201,25 +207,24 @@ class Simba(nn.Module):
             nn.Linear(patch_dim, self.dim),
             nn.LayerNorm(dim),
         )
-        
+
         # To latent
         self.to_latent = nn.Identity()
-        
+
         # Head
         self.output_head = nn.Sequential(
             Reduce("b n d -> b d", "mean"),
             nn.LayerNorm(self.dim),
             nn.Linear(self.dim, self.num_classes),
         )
-        
-        
+
         # Positional embeddings
         self.pos_emb = posemb_sincos_2d(
-            h = image_height // patch_height,
-            w = image_width // patch_width,
-            dim = dim,
+            h=image_height // patch_height,
+            w=image_width // patch_width,
+            dim=dim,
         )
-        
+
     def forward(self, x: Tensor) -> Tensor:
         """
         Forward pass of the Simba model.
@@ -230,28 +235,24 @@ class Simba(nn.Module):
         Returns:
             Tensor: Output tensor.
         """
-        #device
+        # device
         device = x.device
-        
+
         # Patch
         x = self.to_patch(x)
         print(f"Patch: {x.shape}")
-        
+
         # Maybe add positional embeddings here
         if self.use_pos_emb:
             x += self.pos_emb.to(device, dtype=x.dtype)
-        
+
         # Loop through simba blocks
         for layer in self.simba_blocks:
             x = layer(x)
             print(f"Layer: {x.shape}")
-        
+
         # To latent
         x = self.to_latent(x)
         print(x.shape)
-        
-        return self.output_head(x)
-    
-    
 
-    
+        return self.output_head(x)
