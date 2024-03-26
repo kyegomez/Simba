@@ -3,8 +3,8 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "paper"
-version = "0.0.1"
+name = "simba-torch"
+version = "0.0.2"
 description = "Paper - Pytorch"
 license = "MIT"
 authors = ["Kye Gomez <kye@apac.ai>"]
@@ -23,12 +23,9 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.6"
-swarms = "*"
 zetascale = "*"
-
-[tool.poetry.dev-dependencies]
-# Add development dependencies here
-
+torch = "*"
+einops = "*"
 
 [tool.poetry.group.lint.dependencies]
 ruff = "^0.1.6"
