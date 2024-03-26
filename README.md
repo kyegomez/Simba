@@ -39,3 +39,8 @@ print(out.shape)
 
 # License
 MIT
+
+# Todo
+- [ ] Add paper link
+- [ ] Add citation bibtex
+- [ ] cleanup
