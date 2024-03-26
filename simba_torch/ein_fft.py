@@ -195,11 +195,11 @@ class EinFFTText(nn.Module):
 
 
 # Random input tensor
-x = torch.randn(1, 3, 64)
+# x = torch.randn(1, 3, 64)
 
-# Instantiate EinFFT module
-einfft = EinFFTText(3, 64)
+# # Instantiate EinFFT module
+# einfft = EinFFTText(3, 64)
 
-# Apply EinFFT to get an output
-output = einfft(x)
-print(output.shape)
+# # Apply EinFFT to get an output
+# output = einfft(x)
+# print(output.shape)
