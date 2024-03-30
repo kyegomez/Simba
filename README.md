@@ -43,6 +43,7 @@ Dependencies: download and extract the datasets through wget
 `wget http://images.cocodataset.org/zips/val2017.zip -O coco_val2017.zip`
 `wget http://images.cocodataset.org/annotations/annotations_trainval2017.zip -O coco_ann2017.zip`
 
+Then run the following script:
 `python3 train.py`
 
 # License
